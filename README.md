@@ -1,1 +1,4 @@
 # pobls.vim
+
+## Licence
+MIT
