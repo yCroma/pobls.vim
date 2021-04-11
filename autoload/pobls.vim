@@ -6,7 +6,7 @@ function! pobls#begin() abort " Run pobls.vim
 	\	'Bufnr': List_Bufnr,
 	\	}
 	call popup_menu(List_Buf_Name, #{
-	\	filter: function('MyMenuFilter', [ctx])})
+	\	filter: function('s:MyMenuFilter', [ctx])})
 endfunction
 
 function! pobls#add_List_Bufnr() abort " Used to display buffer names
@@ -16,12 +16,12 @@ endfunction
 function! pobls#add_List_Buf_Name() abort " To make a list for use in a popup
 	let l:List_Bufnr = pobls#add_List_Bufnr()
 	let l:List_Buf_Name = map( l:List_Bufnr, 'bufname(v:val)')
-	let l:List_Rendered_Buf_Name = map( l:List_Buf_Name, 'ModifyEmptyString(v:val)')
+	let l:List_Rendered_Buf_Name = map( l:List_Buf_Name, 's:ModifyEmptyString(v:val)')
 	return l:List_Rendered_Buf_Name
 endfunction
 
 
-function! ModifyEmptyString(string) abort " To convert empty file names
+function! s:ModifyEmptyString(string) abort " To convert empty file names
 	let l:Buffer_Name = ""
 	if a:string == ""
 		let l:Buffer_Name = 'No Name'
@@ -31,7 +31,7 @@ function! ModifyEmptyString(string) abort " To convert empty file names
 	return l:Buffer_Name
 endfunction
 
-function! MyMenuFilter(ctx, winid, key) abort " Required for operations within a popup
+function! s:MyMenuFilter(ctx, winid, key) abort " Required for operations within a popup
 	if a:key is# 'j'
 		if a:ctx.idx < len(a:ctx.Bufnr) - 1
 			let a:ctx.idx = a:ctx.idx + 1
