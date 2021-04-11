@@ -41,12 +41,12 @@ function! s:MyMenuFilter(ctx, winid, key) abort " Required for operations within
 			let a:ctx.idx = a:ctx.idx - 1
 		endif
 	elseif a:key is# "\<CR>"
-		return OpenBuffer(a:winid, 'b', a:ctx.Bufnr[a:ctx.idx])
+		return s:OpenBuffer(a:winid, 'b', a:ctx.Bufnr[a:ctx.idx])
 	endif
 	return popup_filter_menu(a:winid, a:key)
 endfunction
 
-function OpenBuffer(winid, open, Bufnr) abort " Used to open a buffer
+function s:OpenBuffer(winid, open, Bufnr) abort " Used to open a buffer
 	call popup_close(a:winid)
 	execute a:open.a:Bufnr
 	return 1
