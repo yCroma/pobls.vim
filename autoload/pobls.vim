@@ -44,6 +44,8 @@ function! s:MyMenuFilter(ctx, winid, key) abort " Required for operations within
 		return s:OpenBuffer(a:winid, 'b', a:ctx.Bufnr[a:ctx.idx])
 	elseif a:key is# 'v'
 		return s:OpenBuffer(a:winid, 'vsp', bufname(a:ctx.Bufnr[a:ctx.idx]))
+	elseif a:key is# 's'
+		return s:OpenBuffer(a:winid, 'sp', bufname(a:ctx.Bufnr[a:ctx.idx]))
 	endif
 	return popup_filter_menu(a:winid, a:key)
 endfunction
