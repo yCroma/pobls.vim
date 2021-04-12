@@ -14,6 +14,10 @@ function! pobls#add_List_Bufnr_Listed() abort " Required to generate an array of
 	return filter(range(1,bufnr('$')),'buflisted(v:val)	&& "quickfix" !=? getbufvar(v:val, "&buftype") ')
 endfunction
 
+function! pobls#add_List_Bufnr_Unlisted() abort " Required to generate an array of listed and unlisted buffers
+	return filter(range(1,bufnr('$')),'bufexists(v:val)	&& "quickfix" !=? getbufvar(v:val, "&buftype") ')
+endfunction
+
 function! pobls#add_List_Buf_Name() abort " To make a list for use in a popup
 	let l:List_Bufnr = pobls#add_List_Bufnr()
 	let l:List_Buf_Name = map( l:List_Bufnr, 'bufname(v:val)')
