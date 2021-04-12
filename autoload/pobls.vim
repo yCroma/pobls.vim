@@ -10,6 +10,7 @@ function! pobls#begin() abort " Run pobls.vim
 endfunction
 
 function! pobls#add_List_Bufnr() abort " Used to display buffer names
+function! pobls#add_List_Bufnr_Listed() abort " Required to generate an array of listed buffers
 	return filter(range(1,bufnr('$')),'buflisted(v:val)	&& "quickfix" !=? getbufvar(v:val, "&buftype") ')
 endfunction
 
