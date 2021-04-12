@@ -1,4 +1,4 @@
-let g:pobls_show_unlisted_buffers = 0
+let g:pobls_show_unlisted_buffers = get(g:, 'pobls_show_unlisted_buffers', 0)
 
 function! pobls#begin() abort " Run pobls.vim
 	let l:List_Bufnr = pobls#add_List_Bufnr()
