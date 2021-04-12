@@ -59,9 +59,9 @@ function! s:MyMenuFilter(ctx, winid, key) abort " Required for operations within
 	elseif a:key is# "\<CR>"
 		return s:OpenBuffer(a:winid, 'b', a:ctx.Bufnr[a:ctx.idx])
 	elseif a:key is# 'v'
-		return s:OpenBuffer(a:winid, 'vsp', bufname(a:ctx.Bufnr[a:ctx.idx]))
+		return s:OpenSplit(a:winid, 'vsp', bufname(a:ctx.Bufnr[a:ctx.idx]))
 	elseif a:key is# 's'
-		return s:OpenBuffer(a:winid, 'sp', bufname(a:ctx.Bufnr[a:ctx.idx]))
+		return s:OpenSplit(a:winid, 'sp', bufname(a:ctx.Bufnr[a:ctx.idx]))
 	endif
 	return popup_filter_menu(a:winid, a:key)
 endfunction
@@ -72,3 +72,8 @@ function s:OpenBuffer(winid, open, Bufnr) abort " Used to open a buffer
 	return 1
 endfunction
 
+function s:OpenSplit(winid, open, Bufname) abort
+	call popup_close(a:winid)
+	execute a:open a:Bufname
+	return 1
+endfunction
