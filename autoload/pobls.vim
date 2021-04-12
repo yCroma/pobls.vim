@@ -72,3 +72,8 @@ function s:OpenBuffer(winid, open, Bufnr) abort " Used to open a buffer
 	return 1
 endfunction
 
+function s:OpenSplit(winid, open, Bufname) abort
+	call popup_close(a:winid)
+	execute a:open a:Bufname
+	return 1
+endfunction
