@@ -28,11 +28,10 @@ function! pobls#set_list_bufnr_unlisted() abort " Required for pobls#set_list_bu
 	return filter(range(1,bufnr('$')),'bufexists(v:val)	&& "quickfix" !=? getbufvar(v:val, "&buftype") ')
 endfunction
 
-	let l:List_Bufnr = pobls#add_List_Bufnr()
-	let l:List_Buf_Name = map( l:List_Bufnr, 'bufname(v:val)')
-	let l:List_Rendered_Buf_Name = map( l:List_Buf_Name, 's:ModifyEmptyString(v:val)')
-	return l:List_Rendered_Buf_Name
 function! pobls#set_list_bufname() abort " To make a list for use in a popup
+	let l:list_bufnr = pobls#set_list_bufnr()
+	let l:list_bufname = map(l:list_bufnr, 'bufname(v:val)')
+	return l:list_bufname
 endfunction
 
 function! s:render_list_bufname(list_bufname) abort 
