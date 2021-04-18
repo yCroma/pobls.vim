@@ -82,7 +82,7 @@ endfunction
 
 function s:OpenBuffer(winid, open, Bufnr) abort " Used to open a buffer
 	call popup_close(a:winid)
-	execute a:open.a:Bufnr
+	execute a:open a:Bufnr
 	return 1
 endfunction
 
