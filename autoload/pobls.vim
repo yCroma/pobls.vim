@@ -1,6 +1,5 @@
 let g:pobls_show_unlisted_buffers = get(g:, 'pobls_show_unlisted_buffers', 0)
 
-function! pobls#begin() abort " Run pobls.vim
 	let l:List_Bufnr = pobls#add_List_Bufnr()
 	let l:List_Buf_Name = pobls#add_List_Buf_Name()
 	let ctx = {
@@ -9,6 +8,7 @@ function! pobls#begin() abort " Run pobls.vim
 	\	}
 	call popup_menu(List_Buf_Name, #{
 	\	filter: function('s:MyMenuFilter', [ctx])})
+function! pobls#start() abort " Run pobls.vim
 endfunction
 
 function! pobls#add_List_Bufnr() abort " Required to get the buffer list
