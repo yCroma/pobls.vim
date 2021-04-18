@@ -1,7 +1,5 @@
 let g:pobls_show_unlisted_buffers = get(g:, 'pobls_show_unlisted_buffers', 0)
 
-	let l:List_Bufnr = pobls#add_List_Bufnr()
-	let l:List_Buf_Name = pobls#add_List_Buf_Name()
 	let ctx = {
 	\	'idx': 0,
 	\	'Bufnr': List_Bufnr,
@@ -9,31 +7,33 @@ let g:pobls_show_unlisted_buffers = get(g:, 'pobls_show_unlisted_buffers', 0)
 	call popup_menu(List_Buf_Name, #{
 	\	filter: function('s:MyMenuFilter', [ctx])})
 function! pobls#start() abort " Run pobls.vim
+	let s:list_bufnr = pobls#set_list_bufnr()
+	let s:list_bufname = pobls#set_list_bufname()
 endfunction
 
-function! pobls#add_List_Bufnr() abort " Required to get the buffer list
 	let l:List_Bufnr = []
+function! pobls#set_list_bufnr() abort " Local scope do not refer to the same memory
 	if (g:pobls_show_unlisted_buffers == 0)
-		let l:List_Bufnr = pobls#add_List_Bufnr_Listed()
+		let l:list_bufnr = pobls#set_list_bufnr_listed()
 	else
-		let l:List_Bufnr = pobls#add_List_Bufnr_Unlisted()
+		let l:list_bufnr = pobls#set_list_bufnr_unlisted()
 	endif
-	return l:List_Bufnr
+	return l:list_bufnr
 endfunction
 
-function! pobls#add_List_Bufnr_Listed() abort " Required to generate an array of listed buffers
+function! pobls#set_list_bufnr_listed() abort " Required for pobls#set_list_bufnr
 	return filter(range(1,bufnr('$')),'buflisted(v:val)	&& "quickfix" !=? getbufvar(v:val, "&buftype") ')
 endfunction
 
-function! pobls#add_List_Bufnr_Unlisted() abort " Required to generate an array of listed and unlisted buffers
+function! pobls#set_list_bufnr_unlisted() abort " Required for pobls#set_list_bufnr
 	return filter(range(1,bufnr('$')),'bufexists(v:val)	&& "quickfix" !=? getbufvar(v:val, "&buftype") ')
 endfunction
 
-function! pobls#add_List_Buf_Name() abort " To make a list for use in a popup
 	let l:List_Bufnr = pobls#add_List_Bufnr()
 	let l:List_Buf_Name = map( l:List_Bufnr, 'bufname(v:val)')
 	let l:List_Rendered_Buf_Name = map( l:List_Buf_Name, 's:ModifyEmptyString(v:val)')
 	return l:List_Rendered_Buf_Name
+function! pobls#set_list_bufname() abort " To make a list for use in a popup
 endfunction
 
 
