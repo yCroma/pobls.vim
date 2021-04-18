@@ -1,41 +1,42 @@
 let g:pobls_show_unlisted_buffers = get(g:, 'pobls_show_unlisted_buffers', 0)
 
-function! pobls#begin() abort " Run pobls.vim
-	let l:List_Bufnr = pobls#add_List_Bufnr()
-	let l:List_Buf_Name = pobls#add_List_Buf_Name()
-	let ctx = {
-	\	'idx': 0,
-	\	'Bufnr': List_Bufnr,
-	\	}
-	call popup_menu(List_Buf_Name, #{
-	\	filter: function('s:MyMenuFilter', [ctx])})
+function! pobls#start() abort " Run pobls.vim
+	let s:list_bufnr = pobls#set_list_bufnr()
+	let s:list_bufname = pobls#set_list_bufname()
+	call s:render_list_bufname(s:list_bufname)
+	call pobls#display_popup()
 endfunction
 
-function! pobls#add_List_Bufnr() abort " Required to get the buffer list
-	let l:List_Bufnr = []
+function! pobls#set_list_bufnr() abort " Local scope do not refer to the same memory
+	" Set a list of bufnr to l:list_bufnr
 	if (g:pobls_show_unlisted_buffers == 0)
-		let l:List_Bufnr = pobls#add_List_Bufnr_Listed()
+		let l:list_bufnr = pobls#set_list_bufnr_listed()
 	else
-		let l:List_Bufnr = pobls#add_List_Bufnr_Unlisted()
+		let l:list_bufnr = pobls#set_list_bufnr_unlisted()
 	endif
-	return l:List_Bufnr
+	return l:list_bufnr
 endfunction
 
-function! pobls#add_List_Bufnr_Listed() abort " Required to generate an array of listed buffers
+function! pobls#set_list_bufnr_listed() abort " Required for pobls#set_list_bufnr
+	" Set the listed buffers
 	return filter(range(1,bufnr('$')),'buflisted(v:val)	&& "quickfix" !=? getbufvar(v:val, "&buftype") ')
 endfunction
 
-function! pobls#add_List_Bufnr_Unlisted() abort " Required to generate an array of listed and unlisted buffers
+function! pobls#set_list_bufnr_unlisted() abort " Required for pobls#set_list_bufnr
+	" Set the existed buffers
 	return filter(range(1,bufnr('$')),'bufexists(v:val)	&& "quickfix" !=? getbufvar(v:val, "&buftype") ')
 endfunction
 
-function! pobls#add_List_Buf_Name() abort " To make a list for use in a popup
-	let l:List_Bufnr = pobls#add_List_Bufnr()
-	let l:List_Buf_Name = map( l:List_Bufnr, 'bufname(v:val)')
-	let l:List_Rendered_Buf_Name = map( l:List_Buf_Name, 's:ModifyEmptyString(v:val)')
-	return l:List_Rendered_Buf_Name
+function! pobls#set_list_bufname() abort " To make a list for use in a popup
+	let l:list_bufnr = pobls#set_list_bufnr()
+	let l:list_bufname = map(l:list_bufnr, 'bufname(v:val)')
+	return l:list_bufname
 endfunction
 
+function! s:render_list_bufname(list_bufname) abort 
+	" Convert unnamed buffer to 'No name'
+	let s:list_bufname = map( a:list_bufname, 's:ModifyEmptyString(v:val)')
+endfunction
 
 function! s:ModifyEmptyString(string) abort " To convert empty file names
 	let l:Buffer_Name = ""
@@ -45,6 +46,20 @@ function! s:ModifyEmptyString(string) abort " To convert empty file names
 		let l:Buffer_Name = a:string
 	endif
 	return l:Buffer_Name
+endfunction
+
+function! pobls#display_popup() abort
+	" call popup_menu
+	let ctx = {
+	\	'idx': 0,
+	\	'Bufnr': s:list_bufnr,
+	\	}
+
+	call popup_menu(
+	\ s:list_bufname, 
+	\	#{
+	\		filter: function('s:MyMenuFilter', [ctx])
+	\	})
 endfunction
 
 function! s:MyMenuFilter(ctx, winid, key) abort " Required for operations within a popup
@@ -68,7 +83,7 @@ endfunction
 
 function s:OpenBuffer(winid, open, Bufnr) abort " Used to open a buffer
 	call popup_close(a:winid)
-	execute a:open.a:Bufnr
+	execute a:open a:Bufnr
 	return 1
 endfunction
 
