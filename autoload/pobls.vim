@@ -9,6 +9,7 @@ endfunction
 
 	let l:List_Bufnr = []
 function! pobls#set_list_bufnr() abort " Local scope do not refer to the same memory
+	" Set a list of bufnr to l:list_bufnr
 	if (g:pobls_show_unlisted_buffers == 0)
 		let l:list_bufnr = pobls#set_list_bufnr_listed()
 	else
@@ -18,10 +19,12 @@ function! pobls#set_list_bufnr() abort " Local scope do not refer to the same me
 endfunction
 
 function! pobls#set_list_bufnr_listed() abort " Required for pobls#set_list_bufnr
+	" Set the listed buffers
 	return filter(range(1,bufnr('$')),'buflisted(v:val)	&& "quickfix" !=? getbufvar(v:val, "&buftype") ')
 endfunction
 
 function! pobls#set_list_bufnr_unlisted() abort " Required for pobls#set_list_bufnr
+	" Set the existed buffers
 	return filter(range(1,bufnr('$')),'bufexists(v:val)	&& "quickfix" !=? getbufvar(v:val, "&buftype") ')
 endfunction
 
