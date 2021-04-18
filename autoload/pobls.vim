@@ -7,7 +7,6 @@ function! pobls#start() abort " Run pobls.vim
 	call pobls#display_popup()
 endfunction
 
-	let l:List_Bufnr = []
 function! pobls#set_list_bufnr() abort " Local scope do not refer to the same memory
 	" Set a list of bufnr to l:list_bufnr
 	if (g:pobls_show_unlisted_buffers == 0)
