@@ -10,6 +10,7 @@ function! pobls#start() abort " Run pobls.vim
 	let s:list_bufnr = pobls#set_list_bufnr()
 	let s:list_bufname = pobls#set_list_bufname()
 	call s:render_list_bufname(s:list_bufname)
+	call pobls#display_popup()
 endfunction
 
 	let l:List_Bufnr = []
@@ -50,6 +51,20 @@ function! s:ModifyEmptyString(string) abort " To convert empty file names
 		let l:Buffer_Name = a:string
 	endif
 	return l:Buffer_Name
+endfunction
+
+function! pobls#display_popup() abort
+	" call popup_menu
+	let ctx = {
+	\	'idx': 0,
+	\	'Bufnr': s:list_bufnr,
+	\	}
+
+	call popup_menu(
+	\ s:list_bufname, 
+	\	#{
+	\		filter: function('s:MyMenuFilter', [ctx])
+	\	})
 endfunction
 
 function! s:MyMenuFilter(ctx, winid, key) abort " Required for operations within a popup
