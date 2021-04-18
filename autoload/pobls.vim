@@ -9,6 +9,7 @@ let g:pobls_show_unlisted_buffers = get(g:, 'pobls_show_unlisted_buffers', 0)
 function! pobls#start() abort " Run pobls.vim
 	let s:list_bufnr = pobls#set_list_bufnr()
 	let s:list_bufname = pobls#set_list_bufname()
+	call s:render_list_bufname(s:list_bufname)
 endfunction
 
 	let l:List_Bufnr = []
@@ -36,6 +37,10 @@ endfunction
 function! pobls#set_list_bufname() abort " To make a list for use in a popup
 endfunction
 
+function! s:render_list_bufname(list_bufname) abort 
+	" Convert unnamed buffer to 'No name'
+	let s:list_bufname = map( a:list_bufname, 's:ModifyEmptyString(v:val)')
+endfunction
 
 function! s:ModifyEmptyString(string) abort " To convert empty file names
 	let l:Buffer_Name = ""
