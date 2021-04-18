@@ -1,11 +1,5 @@
 let g:pobls_show_unlisted_buffers = get(g:, 'pobls_show_unlisted_buffers', 0)
 
-	let ctx = {
-	\	'idx': 0,
-	\	'Bufnr': List_Bufnr,
-	\	}
-	call popup_menu(List_Buf_Name, #{
-	\	filter: function('s:MyMenuFilter', [ctx])})
 function! pobls#start() abort " Run pobls.vim
 	let s:list_bufnr = pobls#set_list_bufnr()
 	let s:list_bufname = pobls#set_list_bufname()
