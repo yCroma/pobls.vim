@@ -21,12 +21,12 @@ function! pobls#set_list_bufnr() abort " Switch functions by value of unlisted_b
 	return l:list_bufnr
 endfunction
 
-function! pobls#set_list_bufnr_listed() abort " Required for pobls#set_list_bufnr
+function! pobls#set_list_bufnr_listed() abort 
 	" Set the listed buffers
 	return filter(range(1,bufnr('$')),'buflisted(v:val)	&& "quickfix" !=? getbufvar(v:val, "&buftype") ')
 endfunction
 
-function! pobls#set_list_bufnr_unlisted() abort " Required for pobls#set_list_bufnr
+function! pobls#set_list_bufnr_unlisted() abort 
 	" Set the existed buffers
 	return filter(range(1,bufnr('$')),'bufexists(v:val)	&& "quickfix" !=? getbufvar(v:val, "&buftype") ')
 endfunction
