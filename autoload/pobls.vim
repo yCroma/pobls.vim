@@ -1,9 +1,13 @@
 let g:pobls_show_unlisted_buffers = get(g:, 'pobls_show_unlisted_buffers', 0)
 
 function! pobls#start() abort " Run pobls.vim
+	" Declare variables in script scope
 	let s:list_bufnr = pobls#set_list_bufnr()
 	let s:list_bufname = pobls#set_list_bufname()
+	" Process data in script scope
 	call s:render_list_bufname()
+	" At this point, the data for the pop-up is complete
+	" if you want to filter the data, you can do it after this line
 	call pobls#display_popup()
 endfunction
 
