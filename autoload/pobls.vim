@@ -11,8 +11,8 @@ function! pobls#start() abort " Run pobls.vim
 	call pobls#display_popup()
 endfunction
 
-function! pobls#set_list_bufnr() abort " Local scope do not refer to the same memory
-	" Set a list of bufnr to l:list_bufnr
+function! pobls#set_list_bufnr() abort " Switch functions by value of unlisted_buffers
+	" Make it local scope to avoid referring to the same memory
 	if (g:pobls_show_unlisted_buffers == 0)
 		let l:list_bufnr = pobls#set_list_bufnr_listed()
 	else
@@ -31,7 +31,7 @@ function! pobls#set_list_bufnr_unlisted() abort " Required for pobls#set_list_bu
 	return filter(range(1,bufnr('$')),'bufexists(v:val)	&& "quickfix" !=? getbufvar(v:val, "&buftype") ')
 endfunction
 
-function! pobls#set_list_bufname() abort " To make a list for use in a popup
+function! pobls#set_list_bufname() abort " Get bufname from bufnr
 	let l:list_bufnr = pobls#set_list_bufnr()
 	let l:list_bufname = map(l:list_bufnr, 'bufname(v:val)')
 	return l:list_bufname
