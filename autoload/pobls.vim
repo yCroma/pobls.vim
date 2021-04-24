@@ -1,14 +1,18 @@
 let g:pobls_show_unlisted_buffers = get(g:, 'pobls_show_unlisted_buffers', 0)
 
 function! pobls#start() abort " Run pobls.vim
+	" Declare variables in script scope
 	let s:list_bufnr = pobls#set_list_bufnr()
 	let s:list_bufname = pobls#set_list_bufname()
-	call s:render_list_bufname(s:list_bufname)
+	" Process data in script scope
+	call s:render_list_bufname()
+	" At this point, the data for the pop-up is complete
+	" if you want to filter the data, you can do it after this line
 	call pobls#display_popup()
 endfunction
 
-function! pobls#set_list_bufnr() abort " Local scope do not refer to the same memory
-	" Set a list of bufnr to l:list_bufnr
+function! pobls#set_list_bufnr() abort " Switch functions by value of unlisted_buffers
+	" Make it local scope to avoid referring to the same memory
 	if (g:pobls_show_unlisted_buffers == 0)
 		let l:list_bufnr = pobls#set_list_bufnr_listed()
 	else
@@ -17,25 +21,25 @@ function! pobls#set_list_bufnr() abort " Local scope do not refer to the same me
 	return l:list_bufnr
 endfunction
 
-function! pobls#set_list_bufnr_listed() abort " Required for pobls#set_list_bufnr
+function! pobls#set_list_bufnr_listed() abort 
 	" Set the listed buffers
 	return filter(range(1,bufnr('$')),'buflisted(v:val)	&& "quickfix" !=? getbufvar(v:val, "&buftype") ')
 endfunction
 
-function! pobls#set_list_bufnr_unlisted() abort " Required for pobls#set_list_bufnr
+function! pobls#set_list_bufnr_unlisted() abort 
 	" Set the existed buffers
 	return filter(range(1,bufnr('$')),'bufexists(v:val)	&& "quickfix" !=? getbufvar(v:val, "&buftype") ')
 endfunction
 
-function! pobls#set_list_bufname() abort " To make a list for use in a popup
+function! pobls#set_list_bufname() abort " Get bufname from bufnr
 	let l:list_bufnr = pobls#set_list_bufnr()
 	let l:list_bufname = map(l:list_bufnr, 'bufname(v:val)')
 	return l:list_bufname
 endfunction
 
-function! s:render_list_bufname(list_bufname) abort 
+function! s:render_list_bufname() abort 
 	" Convert unnamed buffer to 'No name'
-	let s:list_bufname = map( a:list_bufname, 's:ModifyEmptyString(v:val)')
+	let s:list_bufname = map( s:list_bufname, 's:ModifyEmptyString(v:val)')
 endfunction
 
 function! s:ModifyEmptyString(string) abort " To convert empty file names
