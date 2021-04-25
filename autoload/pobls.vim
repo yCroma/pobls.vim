@@ -1,8 +1,10 @@
 let g:pobls_show_unlisted_buffers = get(g:, 'pobls_show_unlisted_buffers', 0)
+let g:pobls_ignore_pattern = get(g:, 'pobls_ignore_pattern', [])
 
 function! pobls#start() abort " Run pobls.vim
 	" Declare variables in script scope
 	let s:list_bufnr = pobls#set_list_bufnr()
+	call s:filter_data()
 	let s:list_bufname = pobls#set_list_bufname()
 	" Process data in script scope
 	call s:render_list_bufname()
@@ -32,7 +34,7 @@ function! pobls#set_list_bufnr_unlisted() abort
 endfunction
 
 function! pobls#set_list_bufname() abort " Get bufname from bufnr
-	let l:list_bufnr = pobls#set_list_bufnr()
+	let l:list_bufnr = s:list_bufnr
 	let l:list_bufname = map(l:list_bufnr, 'bufname(v:val)')
 	return l:list_bufname
 endfunction
@@ -50,6 +52,11 @@ function! s:ModifyEmptyString(string) abort " To convert empty file names
 		let l:Buffer_Name = a:string
 	endif
 	return l:Buffer_Name
+endfunction
+
+function! s:filter_data() abort
+	let l:ignore_pattern = '\v'.join(g:pobls_ignore_pattern, '|')
+	let s:list_bufnr = filter(s:list_bufnr, 'bufname(v:val) !~# l:ignore_pattern')
 endfunction
 
 function! pobls#display_popup() abort
