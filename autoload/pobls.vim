@@ -2,14 +2,15 @@ let g:pobls_show_unlisted_buffers = get(g:, 'pobls_show_unlisted_buffers', 0)
 let g:pobls_ignore_pattern = get(g:, 'pobls_ignore_pattern', [])
 
 function! pobls#start() abort " Run pobls.vim
-	" Declare variables in script scope
+	" s:list_bufnr needs to be script scope as it is used for popup generation
 	let s:list_bufnr = pobls#set_list_bufnr()
-	call s:filter_data()
+	" bufname is generated from bufnr
+	" so we need to filter it here
+	call s:filter_list_bufnr()
 	let s:list_bufname = pobls#set_list_bufname()
-	" Process data in script scope
+	" bufnr is already filtered
+	" bufname will be filtered now
 	call s:render_list_bufname()
-	" At this point, the data for the pop-up is complete
-	" if you want to filter the data, you can do it after this line
 	call pobls#display_popup()
 endfunction
 
@@ -54,7 +55,7 @@ function! s:ModifyEmptyString(string) abort " To convert empty file names
 	return l:Buffer_Name
 endfunction
 
-function! s:filter_data() abort
+function! s:filter_list_bufnr() abort
 	let l:ignore_pattern = '\v'.join(g:pobls_ignore_pattern, '|')
 	let s:list_bufnr = filter(s:list_bufnr, 'bufname(v:val) !~# l:ignore_pattern')
 endfunction
