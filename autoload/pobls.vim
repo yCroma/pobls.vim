@@ -34,7 +34,7 @@ function! pobls#set_list_bufnr_unlisted() abort
 endfunction
 
 function! pobls#set_list_bufname() abort " Get bufname from bufnr
-	let l:list_bufnr = pobls#set_list_bufnr()
+	let l:list_bufnr = s:list_bufnr
 	let l:list_bufname = map(l:list_bufnr, 'bufname(v:val)')
 	return l:list_bufname
 endfunction
