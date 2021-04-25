@@ -4,7 +4,7 @@ let g:pobls_ignore_pattern = get(g:, 'pobls_ignore_pattern', [])
 function! pobls#start() abort " Run pobls.vim
 	" Declare variables in script scope
 	let s:list_bufnr = pobls#set_list_bufnr()
-	call s:filter_data()
+	call s:filter_list_bufnr()
 	let s:list_bufname = pobls#set_list_bufname()
 	" Process data in script scope
 	call s:render_list_bufname()
@@ -54,7 +54,7 @@ function! s:ModifyEmptyString(string) abort " To convert empty file names
 	return l:Buffer_Name
 endfunction
 
-function! s:filter_data() abort
+function! s:filter_list_bufnr() abort
 	let l:ignore_pattern = '\v'.join(g:pobls_ignore_pattern, '|')
 	let s:list_bufnr = filter(s:list_bufnr, 'bufname(v:val) !~# l:ignore_pattern')
 endfunction
