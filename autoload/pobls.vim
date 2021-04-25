@@ -2,9 +2,14 @@ let g:pobls_show_unlisted_buffers = get(g:, 'pobls_show_unlisted_buffers', 0)
 let g:pobls_ignore_pattern = get(g:, 'pobls_ignore_pattern', [])
 
 function! pobls#start() abort " Run pobls.vim
+	" s:list_bufnr needs to be script scope as it is used for popup generation
 	let s:list_bufnr = pobls#set_list_bufnr()
+	" bufname is generated from bufnr
+	" so we need to filter it here
 	call s:filter_list_bufnr()
 	let s:list_bufname = pobls#set_list_bufname()
+	" bufnr is already filtered
+	" bufname will be filtered now
 	call s:render_list_bufname()
 	call pobls#display_popup()
 endfunction
