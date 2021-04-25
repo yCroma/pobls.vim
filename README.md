@@ -18,6 +18,12 @@ pobls.vim enables display of buffer list.
   ```vim
   let g:pobls_show_unlisted_buffers = 1 
   ```
+- You can also use regular expressions to exclude buffers(eliminate matches)
+  ```vim
+  let g:pobls_ignore_pattern = [
+  \ '^VS.Vim.Buffer',
+  \]
+  ```
 
 ## Licence
 MIT
