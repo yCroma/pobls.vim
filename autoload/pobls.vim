@@ -1,4 +1,5 @@
 let g:pobls_show_unlisted_buffers = get(g:, 'pobls_show_unlisted_buffers', 0)
+let g:pobls_ignore_pattern = get(g:, 'pobls_ignore_pattern', [])
 
 function! pobls#start() abort " Run pobls.vim
 	" Declare variables in script scope
