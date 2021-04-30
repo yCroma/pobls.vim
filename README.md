@@ -11,6 +11,7 @@ pobls.vim enables display of buffer list.
 <cr> - open a buffer in the current window
  s   - open a buffer into a split window
  v   - open a buffer into a vertical window
+ d   - wipe out the selected buffer
 ```
 
 ## Options
