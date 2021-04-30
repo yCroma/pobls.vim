@@ -89,6 +89,8 @@ function! s:MyMenuFilter(ctx, winid, key) abort " Required for operations within
 		return s:OpenSplit(a:winid, 'vsp', bufname(a:ctx.Bufnr[a:ctx.idx]))
 	elseif a:key is# 's'
 		return s:OpenSplit(a:winid, 'sp', bufname(a:ctx.Bufnr[a:ctx.idx]))
+	elseif a:key is# 'd'
+		return s:WipeOutBuffer(a:winid, 'bw', a:ctx.Bufnr[a:ctx.idx])
 	endif
 	return popup_filter_menu(a:winid, a:key)
 endfunction
@@ -102,5 +104,13 @@ endfunction
 function s:OpenSplit(winid, open, Bufname) abort
 	call popup_close(a:winid)
 	execute a:open a:Bufname
+	return 1
+endfunction
+
+function s:WipeOutBuffer(winid, open, Bufnr) abort
+	call popup_close(a:winid)
+	execute a:open a:Bufnr
+	" Restart to update the script variables
+	call pobls#start()
 	return 1
 endfunction
