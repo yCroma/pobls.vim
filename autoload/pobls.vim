@@ -89,7 +89,7 @@ function! s:MyMenuFilter(ctx, winid, key) abort " Required for operations within
 		return s:OpenSplit(a:winid, 'vsp', bufname(a:ctx.Bufnr[a:ctx.idx]))
 	elseif a:key is# 's'
 		return s:OpenSplit(a:winid, 'sp', bufname(a:ctx.Bufnr[a:ctx.idx]))
-	elseif a:key is# 'd'
+	elseif a:key is# 'w'
 		return s:WipeOutBuffer(a:winid, 'bw', a:ctx.Bufnr[a:ctx.idx])
 	endif
 	return popup_filter_menu(a:winid, a:key)
